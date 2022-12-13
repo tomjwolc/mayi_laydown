@@ -179,17 +179,13 @@ fn main() {
 }
 
 fn get_all_laydown_possibilities(num_foursies: usize, num_threesies: usize, hand: &Vec<Card>) -> Vec<Vec<Vec<Card>>> {
-    println!("{{\"next\": [");
-    let x = get_all_laydown_possibilities_helper(
+    get_all_laydown_possibilities_helper(
         num_foursies, 
         num_threesies, 
         hand, 
         &HashSet::new(),
         &HashSet::new()
-    );
-    println!("0]}}");
-
-    x
+    )
 }
 
 fn get_all_laydown_possibilities_helper(
@@ -229,10 +225,6 @@ fn get_all_laydown_possibilities_helper(
                 new_hand.remove(index);
             }
 
-            println!("{{");
-
-            println!("\n\"hand\": {:?},\n\"new_hand\": {:?},\n\"run\": {:?},\n\"banned_suits\": {:?},\n\"banned_nums\": {:?},\n\"next\": [", hand, new_hand, run, new_banned_suits.iter().map(|c| c.to_string()).collect::<Vec<String>>(), new_banned_nums.iter().collect::<Vec<&u8>>());
-
             // get all possibilities with the run
             let more_laydown_possibilities = get_all_laydown_possibilities_helper(
                 new_num_foursies, 
@@ -241,8 +233,6 @@ fn get_all_laydown_possibilities_helper(
                 &new_banned_suits,
                 &new_banned_nums
             );
-
-            println!("0]}},");
 
             // add the foursy to each possibility, and add it to the list of all possibilities
             for mut laydown_possibility in more_laydown_possibilities {
