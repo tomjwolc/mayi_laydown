@@ -10,13 +10,20 @@ pub fn hand_eval(hand: &Vec<Card>, num_foursies: usize, num_threesies: usize) ->
     );
 
     let mut max_value = 0;
+    let mut max_cost = 0;
 
     for possibility in laydown_possibilities.iter() {
-        let value = possibility.iter().fold(0, |accum, run| {
-            accum + run.iter().fold(0, |accum, _card| accum + 1)
+        let (value, cost) = possibility.iter().fold((0, 0), |accum, run| {
+            let result = run.iter()
+                .fold((0, 0), |accum, card| (accum.0 + 1, accum.1 + card.value()));
+
+            (accum.0 + result.0, accum.1 + result.1)
         });
 
-        if value > max_value { max_value = value };
+        if value > max_value { 
+            max_value = value;
+            max_cost = cost;
+        };
     }
 
     if laydown_possibilities.len() == 0 {
@@ -25,6 +32,6 @@ pub fn hand_eval(hand: &Vec<Card>, num_foursies: usize, num_threesies: usize) ->
 
         hand_eval(&new_hand, num_foursies, num_threesies) / 10.0
     } else {
-        (10 * max_value + laydown_possibilities.len() / 5) as f64
+        10.0 * max_value as f64 + laydown_possibilities.len() as f64 / 5.0 + max_cost as f64 / 50.0
     }
 }

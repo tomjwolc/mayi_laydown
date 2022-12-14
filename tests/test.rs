@@ -82,7 +82,7 @@ fn test_hand_eval() {
     let mut strings = Vec::new();
 
     for _ in 0..100000 {
-        let hand = Card::get_rand_hand(10, 1);
+        let hand = Card::get_rand_hand(10, 2);
         let mut possibilities = get_all_laydown_possibilities(1, 1, &hand);
 
         possibilities.sort_by(|pos1, pos2| {
@@ -96,8 +96,8 @@ fn test_hand_eval() {
 
     strings.sort();
 
-    for string in strings {
-        println!("{}", string);
+    for (i, string) in strings.iter().enumerate() {
+        println!("{:7}.) {}", strings.len() - i, string);
     }
 }
 
